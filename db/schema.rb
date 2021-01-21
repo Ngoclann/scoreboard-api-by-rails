@@ -10,18 +10,49 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_14_015133) do
+ActiveRecord::Schema.define(version: 2021_01_20_094115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "players", force: :cascade do |t|
-    t.string "username"
-    t.string "password"
-    t.bigint "wins_count"
-    t.bigint "loses_count"
+  create_table "blacklists", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "token"
   end
 
+  create_table "games", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "player1"
+    t.bigint "player2"
+    t.bigint "winner"
+    t.boolean "isPlaying"
+  end
+
+  create_table "logs", force: :cascade do |t|
+    t.integer "point1"
+    t.integer "point2"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "gameid"
+    t.boolean "isP1LastPoint"
+    t.boolean "isP2LastPoint"
+  end
+
+  create_table "players", force: :cascade do |t|
+    t.string "name"
+    t.string "username"
+    t.string "password"
+    t.bigint "point"
+    t.integer "wincount"
+    t.integer "losecount"
+    t.boolean "isLogin"
+    t.boolean "isAdmin"
+    t.text "token"
+  end
+
+  add_foreign_key "games", "players", column: "player1"
+  add_foreign_key "games", "players", column: "player2"
+  add_foreign_key "logs", "games", column: "gameid"
 end
